@@ -13,10 +13,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGO_URL =
-  process.env.MONGO_URL ||
-  'mongodb+srv://Vivek:6326Vivek@cluster0.siom6.mongodb.net/';
-
+const MONGO_URL = process.env.MONGO_URL;
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(
   cors({
