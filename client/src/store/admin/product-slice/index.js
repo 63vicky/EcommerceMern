@@ -10,7 +10,7 @@ export const addNewProduct = createAsyncThunk(
   '/products/addNewProduct',
   async (formData) => {
     const response = await axios.post(
-      'http://localhost:8080/api/admin/products/add',
+      'https://ecommercemern-pzo0.onrender.com/api/admin/products/add',
       formData,
       { headers: { 'Content-Type': 'application/json' } }
     );
@@ -23,7 +23,7 @@ export const fetchAllProducts = createAsyncThunk(
   '/products/fetchAllProducts',
   async () => {
     const response = await axios.get(
-      'http://localhost:8080/api/admin/products/get'
+      'https://ecommercemern-pzo0.onrender.com/api/admin/products/get'
     );
 
     return response?.data;
@@ -33,7 +33,7 @@ export const editProduct = createAsyncThunk(
   'products/editProduct',
   async ({ id, formData }) => {
     const response = await axios.put(
-      `http://localhost:8080/api/admin/products/edit/${id}`,
+      `https://ecommercemern-pzo0.onrender.com/api/admin/products/edit/${id}`,
       formData,
       { headers: { 'Content-Type': 'application/json' } }
     );
@@ -45,7 +45,7 @@ export const deleteProduct = createAsyncThunk(
   'products/deleteProduct',
   async ({ id }) => {
     const response = await axios.delete(
-      `http://localhost:8080/api/admin/products/delete/${id}`
+      `https://ecommercemern-pzo0.onrender.com/api/admin/products/delete/${id}`
     );
 
     return response?.data;

@@ -26,7 +26,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
   '/products/fetchAllProducts',
   async () => {
     const response = await axios.get(
-      'http://localhost:8080/api/shop/products/get'
+      'https://ecommercemern-pzo0.onrender.com/api/shop/products/get'
     );
 
     return response?.data;
