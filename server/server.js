@@ -10,7 +10,6 @@ const shopProductRouter = require('./routes/shop/products-route');
 dotenv.config({});
 
 const path = require('path');
-app.use(express.static(path.join(__dirname, 'dist')));
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +17,7 @@ const MONGO_URL =
   process.env.MONGO_URL ||
   'mongodb+srv://Vivek:6326Vivek@cluster0.siom6.mongodb.net/';
 
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(
   cors({
     origin: 'http://localhost:5173',
