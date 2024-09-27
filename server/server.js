@@ -9,6 +9,9 @@ const shopProductRouter = require('./routes/shop/products-route');
 
 dotenv.config({});
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'dist')));
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URL =
