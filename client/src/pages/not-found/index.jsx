@@ -1,6 +1,16 @@
+/* eslint-disable react/no-unescaped-entities */
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+
 const NotFound = () => {
-  // eslint-disable-next-line react/no-unescaped-entities
-  return <div>Page Doesn't Exists</div>;
+  return (
+    <div>
+      Page Doesn't Exists
+      <Button>
+        <Link to="/shop/home">Home</Link>
+      </Button>
+    </div>
+  );
 };
 
 export default NotFound;
