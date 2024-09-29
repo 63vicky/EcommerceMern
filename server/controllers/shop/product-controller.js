@@ -28,7 +28,7 @@ const getFilteredProducts = async (req, res) => {
         sort.title = 1;
         break;
       case 'title-ztoa':
-        sort.price = -1;
+        sort.title = -1;
         break;
       default:
         sort.price = 1;
