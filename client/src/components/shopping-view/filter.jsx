@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { filterOptions } from '@/config';
 import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
@@ -19,6 +20,12 @@ const ProductFilter = ({ filters, handleFilters }) => {
                   <>
                     <Label className="flex items-center gap-2 font-medium capitalize">
                       <Checkbox
+                        checked={
+                          filters &&
+                          Object.keys(filters).length > 0 &&
+                          filters[item] &&
+                          filters[item].indexOf(option.id) > -1
+                        }
                         onCheckedChange={() => handleFilters(item, option.id)}
                       />
                       {option.label}

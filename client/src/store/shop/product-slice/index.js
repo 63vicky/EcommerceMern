@@ -24,9 +24,14 @@ const shopProductSlice = createSlice({
 
 export const fetchAllFilteredProducts = createAsyncThunk(
   '/products/fetchAllProducts',
-  async () => {
+  async ({ filterParams, sortParams }) => {
+    const query = new URLSearchParams({
+      ...filterParams,
+      sortBy: sortParams,
+    });
+
     const response = await axios.get(
-      'https://ecommercemern-pzo0.onrender.com/api/shop/products/get'
+      `https://ecommercemern-pzo0.onrender.com/api/shop/products/get?${query}`
     );
 
     return response?.data;
