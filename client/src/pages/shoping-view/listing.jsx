@@ -13,15 +13,22 @@ import { sortOptions } from '@/config';
 import { useEffect, useState } from 'react';
 import { ArrowDownUp } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllFilteredProducts } from '@/store/shop/product-slice';
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from '@/store/shop/product-slice';
 import { useSearchParams } from 'react-router-dom';
+import ProductDetailsDialog from '@/components/shopping-view/product-details';
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { isLoading, productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const createSearchParamHelper = (filterParams) => {
     const queryParams = [];
@@ -57,6 +64,14 @@ const ShoppingListing = () => {
     }
   }, [dispatch, filters, sort]);
 
+  useEffect(() => {
+    if (productList !== null) setOpenDetailsDialog(true);
+  }, [productList]);
+
+  function handleGetProductDetails(getCurProductID) {
+    dispatch(fetchProductDetails(getCurProductID));
+  }
+
   const handleSortChange = (value) => {
     setSort(value);
   };
@@ -88,50 +103,84 @@ const ShoppingListing = () => {
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter handleFilters={handleFilters} filters={filters} />
       <div className="bg-background shadow-sm rounded-lg w-full">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="font-extrabold text-lg">All Products</h2>
-          <div className="flex gap-3 items-center">
-            <span className="text-muted-foreground">
-              {productList?.length} Products
-            </span>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button
-                  size="sm"
-                  className="flex items-center gap-1"
-                  variant="outline"
-                >
-                  <ArrowDownUp />
-                  <span>Sort by</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
-                <DropdownMenuRadioGroup
-                  value={sort}
-                  onValueChange={handleSortChange}
-                >
-                  {sortOptions.map((option) => (
-                    <DropdownMenuRadioItem
-                      value={option.id}
-                      className="cursor-pointer"
-                      key={option.id}
+        {isLoading ? (
+          <>
+            <div className="w-full h-full flex justify-center items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-spin"
+              >
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+              Loading..
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="font-extrabold text-lg">All Products</h2>
+              <div className="flex gap-3 items-center">
+                <span className="text-muted-foreground">
+                  {productList?.length} Products
+                </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button
+                      size="sm"
+                      className="flex items-center gap-1"
+                      variant="outline"
                     >
-                      {option.label}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-          {productList && productList.length > 0
-            ? productList.map((item) => (
-                <ProductTile key={item._id} product={item} />
-              ))
-            : null}
-        </div>
+                      <ArrowDownUp />
+                      <span>Sort by</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[200px]">
+                    <DropdownMenuRadioGroup
+                      value={sort}
+                      onValueChange={handleSortChange}
+                    >
+                      {sortOptions.map((option) => (
+                        <DropdownMenuRadioItem
+                          value={option.id}
+                          className="cursor-pointer"
+                          key={option.id}
+                        >
+                          {option.label}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+              {productList && productList.length > 0
+                ? productList.map((item) => (
+                    <ProductTile
+                      key={item._id}
+                      handleGetProductDetails={handleGetProductDetails}
+                      product={item}
+                    />
+                  ))
+                : null}
+            </div>
+          </>
+        )}
       </div>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
