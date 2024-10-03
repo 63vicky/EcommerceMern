@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import AuthLayout from './components/auth/Layout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -26,6 +26,7 @@ function App() {
     (state) => state.auth
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -38,6 +39,18 @@ function App() {
       <Toaster />
       <div className="flex bg-white flex-col overflow-hidden">
         <Routes>
+          <Route
+            path="/"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                {navigate('auth/login')}
+              </CheckAuth>
+            }
+          >
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+
           <Route
             path="/auth"
             element={
