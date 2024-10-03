@@ -14,13 +14,19 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URL;
-app.use(express.static(path.join(__dirname, 'dist')));
+
+const _dirname = path.resolve();
+app.use(express.static(path.join(_dirname, '/client/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(_dirname, 'client', 'dist', 'index.html'));
+});
 app.use(
   cors({
     origin: [
       'http://localhost:5173',
       'https://ecommercemern-pzo0.onrender.com',
       'https://vickys-ecommerce.netlify.app',
+      'http://localhost:8080',
     ],
     methods: ['GET', 'PUT', 'DELETE', 'POST'],
     allowedHeaders: [
