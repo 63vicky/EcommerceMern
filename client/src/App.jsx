@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthLayout from './components/auth/Layout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -42,14 +42,10 @@ function App() {
             path="/"
             element={
               <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <AuthLayout />
-                <Route path="login" element={<Login />} />
+                <Navigate to="/admin/dashboard" />
               </CheckAuth>
             }
-          >
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </Route>
+          ></Route>
 
           <Route
             path="/auth"
