@@ -17,7 +17,11 @@ const MONGO_URL = process.env.MONGO_URL;
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173',
+      'https://ecommercemern-pzo0.onrender.com',
+      'https://vickys-ecommerce.netlify.app',
+    ],
     methods: ['GET', 'PUT', 'DELETE', 'POST'],
     allowedHeaders: [
       'Content-Type',
