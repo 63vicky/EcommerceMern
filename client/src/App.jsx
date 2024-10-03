@@ -42,7 +42,7 @@ function App() {
             path="/"
             element={
               <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <Navigate to="/admin/dashboard" />
+                <Navigate to="/auth/login" />
               </CheckAuth>
             }
           ></Route>
