@@ -4,6 +4,7 @@ import axios from 'axios';
 const initialState = {
   isLoading: false,
   productList: [],
+  isLoadingProductDetails: false,
   productDetails: null,
 };
 
@@ -25,14 +26,14 @@ const shopProductSlice = createSlice({
         state.productList = [];
       })
       .addCase(fetchProductDetails.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingProductDetails = true;
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingProductDetails = false;
         state.productDetails = action.payload.data;
       })
       .addCase(fetchProductDetails.rejected, (state) => {
-        state.isLoading = false;
+        state.isLoadingProductDetails = false;
         state.productDetails = null;
       });
   },
@@ -55,7 +56,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
 );
 
 export const fetchProductDetails = createAsyncThunk(
-  '/products/fetchAllProducts',
+  '/products/fetchProductDetails',
   async (id) => {
     const response = await axios.get(
       `https://ecommercemern-pzo0.onrender.com/api/shop/products/get/${id}`

@@ -22,9 +22,8 @@ import ProductDetailsDialog from '@/components/shopping-view/product-details';
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
-  const { isLoading, productList, productDetails } = useSelector(
-    (state) => state.shopProducts
-  );
+  const { isLoading, isLoadingProductDetails, productList, productDetails } =
+    useSelector((state) => state.shopProducts);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,10 +64,11 @@ const ShoppingListing = () => {
   }, [dispatch, filters, sort]);
 
   useEffect(() => {
-    if (productList !== null) setOpenDetailsDialog(true);
-  }, [productList]);
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   function handleGetProductDetails(getCurProductID) {
+    setOpenDetailsDialog(true);
     dispatch(fetchProductDetails(getCurProductID));
   }
 
@@ -180,6 +180,7 @@ const ShoppingListing = () => {
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}
+        isLoadingProductDetails={isLoadingProductDetails}
       />
     </div>
   );
