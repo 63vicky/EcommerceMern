@@ -16,10 +16,7 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URL;
 
 const _dirname = path.resolve();
-app.use(express.static(path.join(_dirname, '/client/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(_dirname, 'client', 'dist', 'index.html'));
-});
+
 app.use(
   cors({
     origin: [
@@ -46,6 +43,8 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/admin/products', adminProductRouter);
 app.use('/api/shop/products', shopProductRouter);
+
+app.use(express.static(path.join(_dirname, '/client/dist')));
 
 app.listen(PORT, () => {
   console.log(`PORT is running on ${PORT}`);
