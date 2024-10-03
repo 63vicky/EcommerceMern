@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import AuthLayout from './components/auth/Layout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -26,7 +26,6 @@ function App() {
     (state) => state.auth
   );
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -43,7 +42,8 @@ function App() {
             path="/"
             element={
               <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                {navigate('auth/login')}
+                <AuthLayout />
+                <Route path="login" element={<Login />} />
               </CheckAuth>
             }
           >
