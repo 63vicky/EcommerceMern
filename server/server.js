@@ -45,6 +45,9 @@ app.use('/api/admin/products', adminProductRouter);
 app.use('/api/shop/products', shopProductRouter);
 
 app.use(express.static(path.join(_dirname, '/client/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(_dirname, 'client', 'dist', 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`PORT is running on ${PORT}`);
