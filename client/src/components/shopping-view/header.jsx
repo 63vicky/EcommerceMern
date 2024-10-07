@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { logoutUser } from '@/store/auth-slice';
 import { useState } from 'react';
+import userCartWrapper from './cart-wrapper';
 
 const headerMenuItems = [
   {
@@ -76,6 +77,7 @@ const HeaderRightContent = ({ setOpen }) => {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [openCartDialog, setOpenCartDialog] = useState(false);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -84,10 +86,20 @@ const HeaderRightContent = ({ setOpen }) => {
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-      <Button variant="outline" size="icon">
-        <ShoppingCart className="h-6 w-6" />
-        <span className="sr-only">User cart</span>
-      </Button>
+      <Sheet
+        open={openCartDialog}
+        onOpenChange={() => setOpenCartDialog(false)}
+      >
+        <Button
+          variant="outline"
+          onClick={() => setOpenCartDialog(true)}
+          size="icon"
+        >
+          <ShoppingCart className="h-6 w-6" />
+          <span className="sr-only">User cart</span>
+        </Button>
+        <userCartWrapper />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Avatar className="bg-foreground">
