@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { logoutUser } from '@/store/auth-slice';
 import { useState } from 'react';
-import userCartWrapper from './cart-wrapper';
+import UserCartWrapper from './cart-wrapper';
 
 const headerMenuItems = [
   {
@@ -98,7 +98,7 @@ const HeaderRightContent = ({ setOpen }) => {
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">User cart</span>
         </Button>
-        <userCartWrapper />
+        <UserCartWrapper />
       </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">

@@ -19,6 +19,7 @@ import {
 } from '@/store/shop/product-slice';
 import { useSearchParams } from 'react-router-dom';
 import ProductDetailsDialog from '@/components/shopping-view/product-details';
+import { addToCart } from '@/store/shop/cart-slice';
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const ShoppingListing = () => {
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const { user } = useSelector((state) => state.auth);
 
   const createSearchParamHelper = (filterParams) => {
     const queryParams = [];
@@ -41,6 +43,17 @@ const ShoppingListing = () => {
     }
 
     return queryParams.join('&');
+  };
+
+  const handleAddToCart = (getCurrentProductId) => {
+    console.log(getCurrentProductId);
+    dispatch(
+      addToCart({
+        productId: getCurrentProductId,
+        userId: user?.id,
+        quantity: 1,
+      })
+    ).then((data) => console.log(data));
   };
 
   useEffect(() => {
@@ -169,6 +182,7 @@ const ShoppingListing = () => {
                       key={item._id}
                       handleGetProductDetails={handleGetProductDetails}
                       product={item}
+                      handleAddToCart={handleAddToCart}
                     />
                   ))
                 : null}

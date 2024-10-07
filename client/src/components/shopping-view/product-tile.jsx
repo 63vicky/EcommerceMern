@@ -4,7 +4,7 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 
-const ProductTile = ({ product, handleGetProductDetails }) => {
+const ProductTile = ({ product, handleGetProductDetails, handleAddToCart }) => {
   return (
     <Card className="w-full max-w-sm mx-auto cursor-pointer">
       <div onClick={() => handleGetProductDetails(product?._id)}>
@@ -45,10 +45,15 @@ const ProductTile = ({ product, handleGetProductDetails }) => {
             ) : null}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">Add to cart</Button>
-        </CardFooter>
       </div>
+      <CardFooter>
+        <Button
+          onClick={() => handleAddToCart(product?._id)}
+          className="w-full"
+        >
+          Add to cart
+        </Button>
+      </CardFooter>
     </Card>
   );
 };
