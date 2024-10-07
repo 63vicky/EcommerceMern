@@ -20,7 +20,7 @@ export const addToCart = createAsyncThunk(
 
 export const fetchCartItems = createAsyncThunk(
   'cart/fetchCartItems',
-  async ({ userId }) => {
+  async (userId) => {
     const response = await axios.get(
       `https://ecommercemern-pzo0.onrender.com/api/shop/cart/get/${userId}`
     );
