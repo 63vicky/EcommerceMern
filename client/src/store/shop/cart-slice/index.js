@@ -32,7 +32,7 @@ export const fetchCartItems = createAsyncThunk(
 export const deleteCartItem = createAsyncThunk(
   'cart/deleteCartItem',
   async ({ productId, userId }) => {
-    const response = await axios.post(
+    const response = await axios.delete(
       `https://ecommercemern-pzo0.onrender.com/api/shop/cart/${userId}/${productId}`
     );
 
@@ -43,7 +43,7 @@ export const deleteCartItem = createAsyncThunk(
 export const updateCartQuantity = createAsyncThunk(
   'cart/updateCartQuantity',
   async ({ productId, userId, quantity }) => {
-    const response = await axios.post(
+    const response = await axios.put(
       `https://ecommercemern-pzo0.onrender.com/api/shop/cart/update-cart`,
       { productId, userId, quantity }
     );
