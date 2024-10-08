@@ -5,7 +5,7 @@ const addToCart = async (req, res) => {
   try {
     const { productId, userId, quantity } = req.body;
 
-    if ((!productId, !userId, quantity <= 0)) {
+    if (!productId || !userId || quantity <= 0) {
       return res.status(400).json({
         success: false,
         message: 'Invalid product details provided!',
@@ -108,7 +108,7 @@ const updateCartItemQty = async (req, res) => {
   try {
     const { productId, userId, quantity } = req.body;
 
-    if ((!productId, !userId, quantity <= 0)) {
+    if (!productId || !userId || quantity <= 0) {
       return res.status(400).json({
         success: false,
         message: 'Invalid product details provided!',
@@ -169,7 +169,7 @@ const deleteCartItem = async (req, res) => {
   try {
     const { productId, userId } = req.params;
 
-    if ((!productId, !userId)) {
+    if (!productId || !userId) {
       return res.status(400).json({
         success: false,
         message: 'Invalid product details provided!',
@@ -188,7 +188,9 @@ const deleteCartItem = async (req, res) => {
       });
     }
 
-    cart.items = cart.items.filter((item) => item.productId._id !== productId);
+    cart.items = cart.items.filter(
+      (item) => item.productId._id.toString() !== productId
+    );
 
     await cart.save();
 

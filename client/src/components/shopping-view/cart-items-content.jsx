@@ -2,24 +2,16 @@ import { Minus, Plus, Trash } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCartItem } from '@/store/shop/cart-slice';
-import { useToast } from '@/hooks/use-toast';
 
 /* eslint-disable react/prop-types */
 const UserCartItemsContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { toast } = useToast();
 
   const handleDeleteCartItem = (getCartItem) => {
     dispatch(
       deleteCartItem({ productId: getCartItem?.productId, userId: user?.id })
-    )
-      .then(() => {
-        toast({ title: 'Product deleted successfully!' });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
   };
 
   return (
