@@ -14,8 +14,9 @@ import {
 } from '../ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { logoutUser } from '@/store/auth-slice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserCartWrapper from './cart-wrapper';
+import { fetchCartItems } from '@/store/shop/cart-slice';
 
 const headerMenuItems = [
   {
@@ -75,6 +76,7 @@ const MenuItems = ({ setOpen }) => {
 
 const HeaderRightContent = ({ setOpen }) => {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openCartDialog, setOpenCartDialog] = useState(false);
@@ -83,6 +85,10 @@ const HeaderRightContent = ({ setOpen }) => {
     dispatch(logoutUser());
     setOpen ? setOpen(false) : null;
   };
+
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
@@ -98,7 +104,13 @@ const HeaderRightContent = ({ setOpen }) => {
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">User cart</span>
         </Button>
-        <UserCartWrapper />
+        <UserCartWrapper
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
       </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">

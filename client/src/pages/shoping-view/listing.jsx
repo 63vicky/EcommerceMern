@@ -20,17 +20,19 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import ProductDetailsDialog from '@/components/shopping-view/product-details';
 import { addToCart, fetchCartItems } from '@/store/shop/cart-slice';
+import { useToast } from '@/hooks/use-toast';
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
   const { isLoading, isLoadingProductDetails, productList, productDetails } =
     useSelector((state) => state.shopProducts);
-  const { cartItems } = useSelector((state) => state.shopCart);
+
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
 
   const createSearchParamHelper = (filterParams) => {
     const queryParams = [];
@@ -44,6 +46,21 @@ const ShoppingListing = () => {
     }
 
     return queryParams.join('&');
+  };
+
+  const handleAddToCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        productId: getCurrentProductId,
+        userId: user?.id,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({ title: 'Product added to cart' });
+      }
+    });
   };
 
   useEffect(() => {
@@ -69,20 +86,6 @@ const ShoppingListing = () => {
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
-
-  const handleAddToCart = (getCurrentProductId) => {
-    dispatch(
-      addToCart({
-        productId: getCurrentProductId,
-        userId: user?.id,
-        quantity: 1,
-      })
-    ).then((data) => {
-      if (data?.payload?.success) {
-        dispatch(fetchCartItems(user?.id));
-      }
-    });
-  };
 
   function handleGetProductDetails(getCurProductID) {
     setOpenDetailsDialog(true);
@@ -115,7 +118,6 @@ const ShoppingListing = () => {
 
     console.log(searchParams);
   };
-  console.log(cartItems);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
