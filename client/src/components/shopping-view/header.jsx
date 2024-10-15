@@ -151,7 +151,7 @@ const ShoppingHeader = () => {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
+    <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="flex justify-between items-center h-16 px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
           <HousePlug className="h-6 w-6"></HousePlug>

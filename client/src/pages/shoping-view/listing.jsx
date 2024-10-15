@@ -21,6 +21,7 @@ import { useSearchParams } from 'react-router-dom';
 import ProductDetailsDialog from '@/components/shopping-view/product-details';
 import { addToCart, fetchCartItems } from '@/store/shop/cart-slice';
 import { useToast } from '@/hooks/use-toast';
+import Loader from '@/components/Loader';
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
@@ -124,25 +125,7 @@ const ShoppingListing = () => {
       <ProductFilter handleFilters={handleFilters} filters={filters} />
       <div className="bg-background shadow-sm rounded-lg w-full">
         {isLoading ? (
-          <>
-            <div className="w-full h-full flex justify-center items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="animate-spin"
-              >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-              Loading..
-            </div>
-          </>
+          <Loader />
         ) : (
           <>
             <div className="flex justify-between items-center p-4 border-b">
@@ -202,6 +185,7 @@ const ShoppingListing = () => {
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}
         isLoadingProductDetails={isLoadingProductDetails}
+        handleAddToCart={handleAddToCart}
       />
     </div>
   );

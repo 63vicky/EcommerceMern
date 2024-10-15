@@ -5,6 +5,11 @@ import { Button } from '../ui/button';
 import { Dialog, DialogContent } from '../ui/dialog';
 import { Separator } from '../ui/separator';
 import { Input } from '../ui/input';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, fetchCartItems } from '@/store/shop/cart-slice';
+import { useToast } from '@/hooks/use-toast';
+import Loader from '../Loader';
+import { setProductDetails } from '@/store/shop/product-slice';
 
 const ProductDetailsDialog = ({
   open,
@@ -12,29 +17,35 @@ const ProductDetailsDialog = ({
   productDetails,
   isLoadingProductDetails,
 }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
+
+  const handleAddToCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        productId: getCurrentProductId,
+        userId: user?.id,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({ title: 'Product added to cart' });
+      }
+    });
+  };
+
+  const handleProductClose = () => {
+    setOpen(false);
+    dispatch(setProductDetails());
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleProductClose}>
       <DialogContent className="grid grid-cols-2 gap-8 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] sm:p-12">
         {isLoadingProductDetails ? (
-          <>
-            <div className="w-full h-full flex justify-center items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="animate-spin"
-              >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-              Loading..
-            </div>
-          </>
+          <Loader />
         ) : (
           <>
             <div className="relative rounded-lg overflow-hidden">
@@ -86,7 +97,14 @@ const ProductDetailsDialog = ({
               </div>
 
               <div className="mt-5">
-                <Button className="w-full">Add to Cart</Button>
+                <Button
+                  onClick={() => {
+                    handleAddToCart(productDetails?._id);
+                  }}
+                  className="w-full"
+                >
+                  Add to Cart
+                </Button>
               </div>
               <Separator className="mt-4" />
               <div className="max-h-[300px] mt-2 overflow-auto">
