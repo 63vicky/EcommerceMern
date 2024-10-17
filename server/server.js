@@ -7,7 +7,7 @@ const authRouter = require('./routes/auth/auth-routes');
 const adminProductRouter = require('./routes/admin/products-route');
 const shopProductRouter = require('./routes/shop/products-route');
 const shopCartRouter = require('./routes/shop/cart-routes');
-const shopAddressRouter = require('./routes/shop/address-routes');
+const shopAddressRouter = require('./routes/shop/address-route');
 
 dotenv.config({});
 
