@@ -7,6 +7,7 @@ const authRouter = require('./routes/auth/auth-routes');
 const adminProductRouter = require('./routes/admin/products-route');
 const shopProductRouter = require('./routes/shop/products-route');
 const shopCartRouter = require('./routes/shop/cart-routes');
+const shopAddressRouter = require('./routes/shop/address-routes');
 
 dotenv.config({});
 
@@ -45,6 +46,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/admin/products', adminProductRouter);
 app.use('/api/shop/products', shopProductRouter);
 app.use('/api/shop/cart', shopCartRouter);
+app.use('/api/shop/address', shopAddressRouter);
 
 app.use(express.static(path.join(_dirname, '/client/dist')));
 app.get('*', (req, res) => {
