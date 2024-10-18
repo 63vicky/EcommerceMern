@@ -30,7 +30,7 @@ export const editaAddress = createAsyncThunk(
   '/addresses/editaAddress',
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `https://ecommercemern-pzo0.onrender.com/api/shop/address/get/${userId}/${addressId}`,
+      `https://ecommercemern-pzo0.onrender.com/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
 
@@ -41,7 +41,7 @@ export const deleteAddress = createAsyncThunk(
   '/addresses/deleteAddress',
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `https://ecommercemern-pzo0.onrender.com/api/shop/address/get/${userId}/${addressId}`
+      `https://ecommercemern-pzo0.onrender.com/api/shop/address/delete/${userId}/${addressId}`
     );
 
     return response.data;

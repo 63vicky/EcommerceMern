@@ -24,7 +24,6 @@ app.use(
     origin: [
       'http://localhost:5173',
       'https://ecommercemern-pzo0.onrender.com',
-      'https://vickys-ecommerce.netlify.app',
       'http://localhost:8080',
     ],
     methods: ['GET', 'PUT', 'DELETE', 'POST'],

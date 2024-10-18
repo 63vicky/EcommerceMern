@@ -17,6 +17,7 @@ import { logoutUser } from '@/store/auth-slice';
 import { useEffect, useState } from 'react';
 import UserCartWrapper from './cart-wrapper';
 import { fetchCartItems } from '@/store/shop/cart-slice';
+import { Label } from '../ui/label';
 
 const headerMenuItems = [
   {
@@ -26,18 +27,18 @@ const headerMenuItems = [
   },
 
   {
-    id: 'Men',
+    id: 'men',
     label: 'Men',
     path: '/shop/listing',
   },
 
   {
-    id: 'Women',
+    id: 'women',
     label: 'Women',
     path: '/shop/listing',
   },
   {
-    id: 'Kids',
+    id: 'kids',
     label: 'Kids',
     path: '/shop/listing',
   },
@@ -54,20 +55,33 @@ const headerMenuItems = [
 ];
 
 const MenuItems = ({ setOpen }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (getCurrentMenuItem, setOpen) => {
+    sessionStorage.removeItem('filters');
+
+    const currentFilters =
+      getCurrentMenuItem.id !== 'home'
+        ? { category: [getCurrentMenuItem.id] }
+        : null;
+
+    sessionStorage.setItem('filters', JSON.stringify(currentFilters));
+
+    navigate(getCurrentMenuItem.path);
+    setOpen ? setOpen(false) : null;
+  };
+
   return (
     <nav className="flex mb-3 gap-6 lg:mb-0 lg:items-center lg:flex-row flex-col">
       {headerMenuItems.map((item) => {
         return (
-          <Link
-            className="text-sm font-medium"
-            onClick={() => {
-              setOpen ? setOpen(false) : null;
-            }}
-            to={item.path}
+          <Label
+            className="text-sm font-medium cursor-pointer"
+            onClick={() => handleNavigate(item, setOpen)}
             key={item.id}
           >
             {item.label}
-          </Link>
+          </Label>
         );
       })}
     </nav>

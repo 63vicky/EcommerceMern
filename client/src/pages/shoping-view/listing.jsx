@@ -116,8 +116,6 @@ const ShoppingListing = () => {
 
     setFilters(cpyFilter);
     sessionStorage.setItem('filters', JSON.stringify(cpyFilter));
-
-    console.log(searchParams);
   };
 
   return (
