@@ -105,11 +105,7 @@ const deleteAddress = async (req, res) => {
         message: 'user and address IDs are required!',
       });
     }
-    const address = await Address.findOneAndDelete(
-      { _id: addressId, userId },
-      formData,
-      { new: true }
-    );
+    const address = await Address.findOneAndDelete({ _id: addressId, userId });
 
     if (!address) {
       return res.status(404).json({
