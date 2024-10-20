@@ -69,7 +69,7 @@ const editAddress = async (req, res) => {
       });
     }
 
-    const { formData } = req.body;
+    const formData = req.body;
 
     const address = await Address.findOneAndUpdate(
       { _id: addressId, userId },

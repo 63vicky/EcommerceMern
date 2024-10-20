@@ -31,7 +31,8 @@ const Address = () => {
   const handleManageAddress = (e) => {
     e.preventDefault();
 
-    if (addressList.length >= 3) {
+    if (addressList.length >= 3 && currentEditedId === null) {
+      setFormData(initialAddressFormData);
       toast({
         title: 'You can add maximum 3 addresses!',
         variant: 'destructive',
@@ -39,42 +40,40 @@ const Address = () => {
       return;
     }
 
-    {
-      currentEditedId !== null
-        ? dispatch(
-            editaAddress({
-              userId: user?.id,
-              addressId: currentEditedId,
-              formData,
-            })
-          )
-            .then((data) => {
-              if (data?.payload?.success) {
-                dispatch(fetchAllAddresses(user?.id));
-                setCurrentEditedId(null);
-                setFormData(initialAddressFormData);
-                toast({
-                  title: 'Address updated successfully.',
-                });
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            })
-        : dispatch(addNewAddress({ ...formData, userId: user?.id }))
-            .then((data) => {
-              if (data?.payload?.success) {
-                dispatch(fetchAllAddresses(user?.id));
-                setFormData(initialAddressFormData);
-                toast({
-                  title: 'Address Added successfully.',
-                });
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-    }
+    currentEditedId !== null
+      ? dispatch(
+          editaAddress({
+            userId: user?.id,
+            addressId: currentEditedId,
+            formData,
+          })
+        )
+          .then((data) => {
+            if (data?.payload?.success) {
+              dispatch(fetchAllAddresses(user?.id));
+              setCurrentEditedId(null);
+              setFormData(initialAddressFormData);
+              toast({
+                title: 'Address updated successfully.',
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      : dispatch(addNewAddress({ ...formData, userId: user?.id }))
+          .then((data) => {
+            if (data?.payload?.success) {
+              dispatch(fetchAllAddresses(user?.id));
+              setFormData(initialAddressFormData);
+              toast({
+                title: 'Address Added successfully.',
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
   };
 
   const isFormValid = () => {
