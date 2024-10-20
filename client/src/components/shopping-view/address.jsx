@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addNewAddress,
   deleteAddress,
+  editaAddress,
   fetchAllAddresses,
 } from '@/store/shop/address-slice';
 import AddressCard from './address-card';
+import { useToast } from '@/hooks/use-toast';
 
 const initialAddressFormData = {
   address: '',
@@ -23,19 +25,56 @@ const Address = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
+  const { toast } = useToast();
+  const [currentEditedId, setCurrentEditedId] = useState(null);
 
   const handleManageAddress = (e) => {
     e.preventDefault();
-    dispatch(addNewAddress({ ...formData, userId: user?.id }))
-      .then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchAllAddresses(user?.id));
-          setFormData(initialAddressFormData);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+
+    if (addressList.length >= 3) {
+      toast({
+        title: 'You can add maximum 3 addresses!',
+        variant: 'destructive',
       });
+      return;
+    }
+
+    {
+      currentEditedId !== null
+        ? dispatch(
+            editaAddress({
+              userId: user?.id,
+              addressId: currentEditedId,
+              formData,
+            })
+          )
+            .then((data) => {
+              if (data?.payload?.success) {
+                dispatch(fetchAllAddresses(user?.id));
+                setCurrentEditedId(null);
+                setFormData(initialAddressFormData);
+                toast({
+                  title: 'Address updated successfully.',
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        : dispatch(addNewAddress({ ...formData, userId: user?.id }))
+            .then((data) => {
+              if (data?.payload?.success) {
+                dispatch(fetchAllAddresses(user?.id));
+                setFormData(initialAddressFormData);
+                toast({
+                  title: 'Address Added successfully.',
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+    }
   };
 
   const isFormValid = () => {
@@ -48,18 +87,33 @@ const Address = () => {
     dispatch(fetchAllAddresses(user?.id));
   }, [dispatch]);
 
-  const handleEditAddress = () => {};
+  const handleEditAddress = (getCurrentAddress) => {
+    setCurrentEditedId(getCurrentAddress?._id);
+    setFormData({
+      ...formData,
+      address: getCurrentAddress?.address,
+      city: getCurrentAddress?.city,
+      phone: getCurrentAddress?.phone,
+      pincode: getCurrentAddress?.pincode,
+      notes: getCurrentAddress?.notes,
+    });
+  };
   const handleDeleteAddress = (getCurrentAddress) => {
     dispatch(
       deleteAddress({ userId: user?.id, addressId: getCurrentAddress._id })
     ).then((data) => {
-      if (data?.payload?.success) dispatch(fetchAllAddresses(user?.id));
+      if (data?.payload?.success) {
+        dispatch(fetchAllAddresses(user?.id));
+        toast({
+          title: 'Address Deleted successfully.',
+        });
+      }
     });
   };
 
   return (
     <Card>
-      <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+      <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
         {addressList && addressList.length > 0
           ? addressList.map((addressItem, idx) => (
               <AddressCard
@@ -73,7 +127,9 @@ const Address = () => {
       </div>
 
       <CardHeader>
-        <CardTitle>Add New Address</CardTitle>
+        <CardTitle>
+          {currentEditedId !== null ? 'Edit Address' : 'Add New Address'}
+        </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-3">
@@ -81,7 +137,7 @@ const Address = () => {
           formData={formData}
           setFormData={setFormData}
           formControls={addressFormControls}
-          buttonText={'Add'}
+          buttonText={currentEditedId !== null ? 'Edit' : 'Add'}
           onSubmit={handleManageAddress}
           isButtonDisabled={!isFormValid()}
         />
