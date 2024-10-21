@@ -9,7 +9,7 @@ const AddressCard = ({
   handleDeleteAddress,
 }) => {
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardContent className="grid gap-4 p-4">
         <Label>Address: {addressInfo?.address}</Label>
         <Label>City: {addressInfo?.city}</Label>

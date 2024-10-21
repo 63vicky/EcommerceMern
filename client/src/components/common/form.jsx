@@ -79,7 +79,7 @@ const FormCommon = ({
             value={value}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={getItem.placeholder} />
+              <SelectValue placeholder={getItem.label} />
             </SelectTrigger>
             <SelectContent>
               {getItem.options && getItem.options.length > 0

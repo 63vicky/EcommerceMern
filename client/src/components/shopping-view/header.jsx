@@ -119,6 +119,7 @@ const HeaderRightContent = ({ setOpen }) => {
           <span className="sr-only">User cart</span>
         </Button>
         <UserCartWrapper
+          setOpenCartDialog={setOpenCartDialog}
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
               ? cartItems.items
